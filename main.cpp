@@ -10,13 +10,12 @@ This file demonstrates the capability of the cgrad.
 
 
 int main() {
-    Value a(-4);
+
+    Value a(8);
     Value b(2);
+    
+    Value c = a / b;
 
-    Value c = a - b;
-    Value d = c * 4;
-    d.gradient = 1;
-    d.backward(); 
-
+    c.backward(true); // should be -2
     std::cout << b.gradient << std::endl;
 }

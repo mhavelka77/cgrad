@@ -10,11 +10,13 @@ Operations:
 1 - addition
 2 - substraction
 3 - multiplication
-4 - division
+4 - division (implemented with power)
+5 - power
 
 */
 
 #include <iostream>
+#include <cmath>
 
 struct Value {
     public:
@@ -25,18 +27,23 @@ struct Value {
         Value *rhs;
 
         Value(int32_t value);
-        void backward();
+        void backward(bool first);
 };
 
 
 
-std::ostream &operator<<(std::ostream & os, Value &v);
-Value operator*(Value & lhs, Value & rhs);
-Value operator*(int lhs, Value & rhs);
-Value operator*(Value & lhs, int rhs);
-Value operator+(Value & lhs, Value & rhs);
-Value operator+(int lhs, Value & rhs);
-Value operator+(Value & lhs, int rhs);
-Value operator-(Value & lhs, Value & rhs);
-Value operator-(int lhs, Value & rhs);
-Value operator-(Value & lhs, int rhs);
+std::ostream &operator<<(std::ostream &os, Value &v);
+Value operator*(Value &lhs, Value &rhs);
+Value operator*(int lhs, Value &rhs);
+Value operator*(Value &lhs, int rhs);
+Value operator+(Value &lhs, Value &rhs);
+Value operator+(int lhs, Value &rhs);
+Value operator+(Value &lhs, int rhs);
+Value operator-(Value &lhs, Value &rhs);
+Value operator-(int lhs, Value &rhs);
+Value operator-(Value &lhs, int rhs);
+Value power(Value &v, int power);
+Value power(int v, int power);
+Value operator/(Value &lhs, Value &rhs);
+Value operator/(int lhs, Value &rhs);
+Value operator/(Value &lhs, int rhs);
