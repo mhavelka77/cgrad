@@ -4,6 +4,14 @@ Author: Martin Havelka
 
 This file contains the definitions of all core structures.
 
+Operations:
+
+0 - unassigned
+1 - addition
+2 - substraction
+3 - multiplication
+4 - division
+
 */
 
 #include <iostream>
@@ -13,11 +21,11 @@ struct Value {
         int32_t value;
         uint8_t operation = 0;
         int32_t gradient = 0;
-        Value *firstChild;
-        Value *secondChild;
+        Value *lhs;
+        Value *rhs;
 
         Value(int32_t value);
-        std::function<void()> backward;
+        void backward();
 };
 
 

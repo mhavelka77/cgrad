@@ -10,7 +10,6 @@ This file demonstrates the capability of the cgrad.
 
 
 int main() {
-
     Value a(-4);
     Value b(2);
 
@@ -19,5 +18,5 @@ int main() {
     d.gradient = 1;
     d.backward(); 
 
-    std::cout << a.gradient << std::endl;
+    std::cout << b.gradient << std::endl;
 }
