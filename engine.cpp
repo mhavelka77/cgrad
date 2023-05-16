@@ -6,6 +6,7 @@ This file contains the implementation of all core structures.
 */
 #include "engine.hpp"
 
+// This method is recursively calling itself and applying the chain rule
 void Value::backward(bool first) {
     if (first) {
         this->gradient = 1;
@@ -20,21 +21,22 @@ void Value::backward(bool first) {
         this->lhs->gradient += this->gradient * this->rhs->value;
         this->rhs->gradient += this->gradient * this->lhs->value;
     } else if (this->operation == 4) {
-    } else if (this->operation == 5) {
-        this->lhs->gradient = this->rhs->value * pow(this->lhs->value, this->rhs->value - 1);
-        this->rhs->operation = 0;
-    }
-
+        if (this->value > 0) {
+            this->lhs->gradient = this->gradient;
+        } else {
+            this->lhs->gradient = 0;
+        }
+    } 
 
     if (this->lhs->operation != 0) {
         this->lhs->backward(false);
     }
-    if (this->rhs->operation != 0) {
+    if (this->rhs != NULL && this->rhs->operation != 0) {
         this->rhs->backward(false);
     }
 }
 
-Value::Value(int32_t value) {
+Value::Value(float value) {
     this->value = value;
 }
 
@@ -46,16 +48,18 @@ Value operator+(Value &lhs, Value &rhs) {
     return v;
 }
 
-Value operator+(Value &lhs, int rhs) {
+Value operator+(Value &lhs, float rhs) {
     Value right(rhs);
     return lhs + right;
 }
 
-Value operator+(int lhs, Value &rhs) {
+Value operator+(float lhs, Value &rhs) {
     return rhs + lhs;
 }
 
 Value operator*(Value &lhs, Value &rhs) {
+    int a =2;
+    int b =2;
     Value v(lhs.value * rhs.value);
     v.lhs = &lhs;
     v.rhs = &rhs;
@@ -63,12 +67,12 @@ Value operator*(Value &lhs, Value &rhs) {
     return v;
 }
 
-Value operator*(int lhs, Value &rhs) {
+Value operator*(float lhs, Value &rhs) {
     Value left(lhs); 
     return left * rhs;
 }
 
-Value operator*(Value &lhs, int rhs) {
+Value operator*(Value &lhs, float rhs) {
     Value right(rhs);
     return right * lhs;
 }
@@ -81,40 +85,26 @@ Value operator-(Value &lhs, Value &rhs) {
     return v;
 }
 
-Value operator-(int lhs, Value &rhs) {
+Value operator-(float lhs, Value &rhs) {
     Value left(lhs);
     return left - rhs;
 }
 
-Value operator-(Value &lhs, int rhs) {
+Value operator-(Value &lhs, float rhs) {
     return rhs - lhs;
 }
 
-Value power(Value &lhs, int power) {
-    Value v(pow(lhs.value, power));
-    Value temp(power);
-    v.lhs = &lhs;
-    v.rhs = &temp;
-    v.operation = 5;
-    return v;
-}
-
-
-Value operator/(Value &lhs, Value &rhs) {
-    Value temp = power(rhs, -1);
-    return lhs * temp;
-}
-
-Value operator/(int lhs, Value &rhs) {
-    Value left(lhs);
-    return left / rhs;
-}
-
-Value operator/(Value &lhs, int rhs) {
-    return rhs / lhs;
+Value relu(Value v) {
+    Value relued(0);
+    if (v.value > 0) {
+        relued.value = v.value; 
+    }
+    relued.lhs = &v;
+    relued.operation = 4;
+    return relued;
 }
 
 std::ostream & operator<<(std::ostream &os, Value &v) {
-    os << v.value;
+    os << "Value: " << v.value << std::endl << "Grad: " << v.gradient << std::endl;
     return os; 
 }

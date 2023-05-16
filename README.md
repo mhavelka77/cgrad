@@ -9,6 +9,26 @@ Cgrad is an autograd engine based on karpathy/micrograd. Its purpose is to wrap 
 g++ -std=c++17 engine.cpp engine.hpp main.cpp && ./a.out
 ```
 
+## Example 
+
+```c++
+int main() {
+
+    Value a(8);
+    Value b(2);
+    
+    Value c = a * b; 
+
+    c.backward(true); 
+    std::cout << b;
+}
+```
+
+-> 
+```
+Value: 2
+Grad: 8
+```
 
 ## License
 
